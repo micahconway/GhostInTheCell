@@ -1,0 +1,242 @@
+using System;
+using System.Linq;
+using System.IO;
+using System.Text;
+using System.Collections;
+using System.Collections.Generic;
+
+namespace GhostInTheCell
+{
+    class Player
+    {
+        public static bool[] neutralFactoriesAttacked = new bool[30];
+        static void Main(string[] args)
+        {
+            string[] inputs;
+            int factoryCount = int.Parse(Console.ReadLine()); // the number of factories
+            int linkCount = int.Parse(Console.ReadLine()); // the number of links between factories
+
+            List<Link> links = new List<Link>();
+
+            for (int i = 0; i < linkCount; i++)
+            {
+                inputs = Console.ReadLine().Split(' ');
+                int factory1 = int.Parse(inputs[0]);
+                int factory2 = int.Parse(inputs[1]);
+                int distance = int.Parse(inputs[2]);
+                Link newLink = new Link(factory1, factory2, distance);
+                links.Add(newLink);
+            }
+
+            // game loop
+            while (true)
+            {
+                int entityCount = int.Parse(Console.ReadLine()); // the number of entities (e.g. factories and troops)
+                List<Factory> allFactories = new List<Factory>();
+
+                for (int i = 0; i < entityCount; i++)
+                {
+                    inputs = Console.ReadLine().Split(' ');
+                    int entityId = int.Parse(inputs[0]);
+                    string entityType = inputs[1];
+                    int arg1 = int.Parse(inputs[2]);
+                    int arg2 = int.Parse(inputs[3]);
+                    int arg3 = int.Parse(inputs[4]);
+                    int arg4 = int.Parse(inputs[5]);
+                    int arg5 = int.Parse(inputs[6]);
+
+                    if (entityType.Equals("FACTORY"))
+                    {
+                        allFactories.Add(new Factory(entityId, arg1, arg2, arg3));
+                    }
+                }
+
+                // Write an action using Console.WriteLine()
+                // To debug: Console.Error.WriteLine("Debug messages...");
+
+                List<Factory> myFactories = new List<Factory>(FactoryCollection.GetMyFactories(allFactories));
+
+                myFactories.ForEach(x => x.AttackNeutralFactory(FactoryCollection.GetNeutralFactories(allFactories), links));
+
+                myFactories.ForEach(x => x.AttackClosestFactory(FactoryCollection.GetEnemyFactories(allFactories), links));
+
+                // Any valid action, such as "WAIT" or "MOVE source destination cyborgs"
+
+                /*Console.WriteLine("MOVE 1 3 3");
+                 Console.WriteLine("MOVE 1 5 3");
+                 Console.WriteLine("MOVE 1 0 3");
+                 Console.WriteLine("MOVE 1 2 2");
+                 Console.WriteLine("MOVE 1 4 2");*/
+            }
+        }
+    }
+}
+    
+    
+
+
+namespace GhostInTheCell
+{
+    public class Factory
+    {
+        public int Id { get; set; }
+        public int Owner { get; set; } // 1 for you, -1 for your opponent and 0 if neutral
+        public int CyborgCount { get; set; }
+        public int FactoryProduction { get; set; }
+
+        public Factory(int id, int owner, int cyborgCount, int factoryproduction)
+        {
+            Id = id;
+            Owner = owner;
+            CyborgCount = cyborgCount;
+            FactoryProduction = factoryproduction;
+        }
+
+        public Link GetLinkWithClosestEnemy(List<Factory> targetFactories, List<Link> links)
+        {
+            Link closestLink = null;
+            for (int i = 0; i < targetFactories.Count; i++)
+            {
+                foreach (Link link in links)
+                {
+                    // If the link is the one between current and enemy factory
+                    if ((Id == link.SourceFactoryId && targetFactories[i].Id == link.DestinationFactoryId)
+                        || (Id == link.DestinationFactoryId && targetFactories[i].Id == link.SourceFactoryId))
+                    {
+                        if (closestLink != null)
+                        {
+                            if (link.Distance < closestLink.Distance)
+                            {
+                                closestLink = link;
+                            }
+                        }
+                        else
+                        {
+                            closestLink = link;
+                        }
+                    }
+                }
+            }
+            return closestLink;
+        }
+
+        public void AttackClosestFactory(List<Factory> targetFactories, List<Link> links)
+        {
+            Link closestTargetLink = GetLinkWithClosestEnemy(targetFactories, links);
+            //Console.WriteLine(closestEnemyLink.SourceFactoryId + " " + closestEnemyLink.DestinationFactoryId);
+            
+            if (Id == closestTargetLink.SourceFactoryId){
+                Console.WriteLine("MOVE " + Id + " " + closestTargetLink.DestinationFactoryId + " 15");
+            }
+            else
+            {
+                Console.WriteLine("MOVE " + Id + " " + closestTargetLink.SourceFactoryId + " 15");
+            }
+        }
+
+        public void AttackNeutralFactory(List<Factory> neutralFactories, List<Link> links)
+        {
+            for (int i = 0; i < neutralFactories.Count; i++)
+            {
+                int thisNeutralFactoryId = neutralFactories[i].Id;
+                if (!Player.neutralFactoriesAttacked[thisNeutralFactoryId])
+                {
+                    Console.WriteLine("MOVE " + Id + " " + neutralFactories[i].Id + " 1");
+                    Player.neutralFactoriesAttacked[thisNeutralFactoryId] = true;
+                    break;
+                }
+            }
+        }
+
+        #region Static methods
+
+        public static string PrintAllFactoryIDs(List<Factory> factories)
+        {
+            string factoryIds = "";
+            for (int i = 0; i < factories.Count; i++)
+            {
+                factoryIds = factories[i].Id + " ";
+            }
+            return factoryIds;
+        }
+
+        #endregion
+
+    }
+}
+
+namespace GhostInTheCell
+{
+    public class FactoryCollection
+    {
+        public FactoryCollection(List<Factory> factories)
+        {
+            Factories = factories;
+        }
+
+        public List<Factory> Factories { get; set; }
+
+        public void AttackClosestFactories(List<Factory> enemyFactories, List<Link> links)
+        {
+            foreach (Factory myFactory in Factories)
+            {
+                myFactory.AttackClosestFactory(enemyFactories, links);
+            }
+        }
+
+        public void AttackNeutralFactories(List<Factory> neutralFactories, List<Link> links)
+        {
+            foreach (Factory myFactory in Factories)
+            {
+                myFactory.AttackNeutralFactory(neutralFactories, links);
+            }
+        }
+
+        public static List<Factory> GetMyFactories(List<Factory> allFactories)
+        {
+            List<Factory> myFactories = new List<Factory>();
+            foreach (Factory factory in allFactories)
+            {
+                if (factory.Owner == 1) myFactories.Add(factory);
+            }
+            return myFactories;
+        }
+
+        public static List<Factory> GetEnemyFactories(List<Factory> allFactories)
+        {
+            List<Factory> enemyFactories = new List<Factory>();
+            foreach (Factory factory in allFactories)
+            {
+                if (factory.Owner == -1) enemyFactories.Add(factory);
+            }
+            return enemyFactories;
+        }
+
+        public static List<Factory> GetNeutralFactories(List<Factory> allFactories)
+        {
+            List<Factory> neutralFactories = new List<Factory>();
+            foreach (Factory factory in allFactories)
+            {
+                if (factory.Owner == 0) neutralFactories.Add(factory);
+            }
+            return neutralFactories;
+        }
+    }
+}
+
+namespace GhostInTheCell
+{
+    public class Link
+    {
+        public Link(int sourceFactoryId, int destinationFactoryId, int distance)
+        {
+            SourceFactoryId = sourceFactoryId;
+            DestinationFactoryId = destinationFactoryId;
+            Distance = distance;
+        }
+
+        public int SourceFactoryId { get; set; }
+        public int DestinationFactoryId { get; set; }
+        public int Distance { get; set; }
+    }
+}
