@@ -29,7 +29,7 @@ namespace GhostInTheCell
             }
 
             //Put Player at the front of the list
-            for (int i = 0; i < files.Count(); i++)
+            for (int i = 0; i < files.Count; i++)
             {
                 if (files[i].shortFileName == "Player")
                 {

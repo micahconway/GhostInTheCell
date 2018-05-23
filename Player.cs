@@ -56,7 +56,9 @@ namespace GhostInTheCell
 
                 List<Factory> myFactories = new List<Factory>(FactoryCollection.GetMyFactories(allFactories));
 
-                myFactories.ForEach(x => x.AttackNeutralFactory(FactoryCollection.GetNeutralFactories(allFactories), links));
+                //var juiciestNeutralFactory = NeutralFactoryHelper.JuiciestNeutralFactoryId(allFactories);
+
+                myFactories.ForEach(x => x.AttackNeutralFactory(NeutralFactoryHelper.GetAllNeutralFactories(allFactories), links));
 
                 myFactories.ForEach(x => x.AttackClosestFactory(FactoryCollection.GetEnemyFactories(allFactories), links));
 

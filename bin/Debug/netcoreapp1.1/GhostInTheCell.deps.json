@@ -6,7 +6,7 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v1.1": {
-      "ghostinthecell/1.0.0": {
+      "GhostInTheCell/1.0.0": {
         "runtime": {
           "GhostInTheCell.dll": {}
         }
@@ -14,7 +14,7 @@
     }
   },
   "libraries": {
-    "ghostinthecell/1.0.0": {
+    "GhostInTheCell/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

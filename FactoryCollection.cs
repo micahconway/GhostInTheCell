@@ -48,15 +48,5 @@ namespace GhostInTheCell
             }
             return enemyFactories;
         }
-
-        public static List<Factory> GetNeutralFactories(List<Factory> allFactories)
-        {
-            List<Factory> neutralFactories = new List<Factory>();
-            foreach (Factory factory in allFactories)
-            {
-                if (factory.Owner == 0) neutralFactories.Add(factory);
-            }
-            return neutralFactories;
-        }
     }
 }

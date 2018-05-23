@@ -50,14 +50,13 @@ namespace GhostInTheCell
         public void AttackClosestFactory(List<Factory> targetFactories, List<Link> links)
         {
             Link closestTargetLink = GetLinkWithClosestEnemy(targetFactories, links);
-            //Console.WriteLine(closestEnemyLink.SourceFactoryId + " " + closestEnemyLink.DestinationFactoryId);
             
             if (Id == closestTargetLink.SourceFactoryId){
-                Console.WriteLine("MOVE " + Id + " " + closestTargetLink.DestinationFactoryId + " 15");
+                Console.WriteLine("MOVE " + Id + " " + closestTargetLink.DestinationFactoryId + " 100");
             }
             else
             {
-                Console.WriteLine("MOVE " + Id + " " + closestTargetLink.SourceFactoryId + " 15");
+                Console.WriteLine("MOVE " + Id + " " + closestTargetLink.SourceFactoryId + " 100");
             }
         }
 

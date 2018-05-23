@@ -8,3 +8,14 @@ C:\git\GhostInTheCell\GhostInTheCell\bin\Debug\netcoreapp1.1\GhostInTheCell.dll
 C:\git\GhostInTheCell\GhostInTheCell\bin\Debug\netcoreapp1.1\GhostInTheCell.pdb
 C:\git\GhostInTheCell\GhostInTheCell\obj\Debug\netcoreapp1.1\GhostInTheCell.dll
 C:\git\GhostInTheCell\GhostInTheCell\obj\Debug\netcoreapp1.1\GhostInTheCell.pdb
+C:\git\GhostInTheCell\bin\Debug\netcoreapp1.1\GhostInTheCell.deps.json
+C:\git\GhostInTheCell\bin\Debug\netcoreapp1.1\GhostInTheCell.runtimeconfig.json
+C:\git\GhostInTheCell\bin\Debug\netcoreapp1.1\GhostInTheCell.runtimeconfig.dev.json
+C:\git\GhostInTheCell\bin\Debug\netcoreapp1.1\GhostInTheCell.dll
+C:\git\GhostInTheCell\bin\Debug\netcoreapp1.1\GhostInTheCell.pdb
+C:\git\GhostInTheCell\obj\Debug\netcoreapp1.1\GhostInTheCell.csprojResolveAssemblyReference.cache
+C:\git\GhostInTheCell\obj\Debug\netcoreapp1.1\GhostInTheCell.csproj.CoreCompileInputs.cache
+C:\git\GhostInTheCell\obj\Debug\netcoreapp1.1\GhostInTheCell.AssemblyInfoInputs.cache
+C:\git\GhostInTheCell\obj\Debug\netcoreapp1.1\GhostInTheCell.AssemblyInfo.cs
+C:\git\GhostInTheCell\obj\Debug\netcoreapp1.1\GhostInTheCell.dll
+C:\git\GhostInTheCell\obj\Debug\netcoreapp1.1\GhostInTheCell.pdb
